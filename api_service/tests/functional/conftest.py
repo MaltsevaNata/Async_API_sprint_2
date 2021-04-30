@@ -23,13 +23,6 @@ def make_get_request(session):
 
 
 @pytest.fixture(scope='session')
-async def es_client():
-    client = AsyncElasticsearch(hosts=settings.es_host)
-    yield client
-    await client.close()
-
-
-@pytest.fixture(scope='session')
 async def session():
     session = aiohttp.ClientSession()
     yield session
