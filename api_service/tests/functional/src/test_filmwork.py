@@ -6,8 +6,6 @@ import pytest
 parent_dir = Path(__file__).parents[1]
 expected_data_dir = parent_dir.joinpath("testdata", "expected_data", "films")
 
-default_query = ({}, "film_list_default.json", 200, 50)
-
 
 @pytest.mark.parametrize("query_params, expected_data_file, status, page_size",
                          [({}, "film_list_default.json", 200, 50),
