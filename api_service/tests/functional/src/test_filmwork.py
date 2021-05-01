@@ -20,7 +20,6 @@ async def test_film_list(make_get_request, query_params, expected_data, status, 
     assert response.status == status
 
     if expected_data is not None:
-        # загрузка ожиадемого результата из файла и проверка
-        # соответствия ответа содержимому файла
+        # Проверка соответствия ответа содержимому файла
         assert len(response.body) == page_size
         assert response.body == expected_data
