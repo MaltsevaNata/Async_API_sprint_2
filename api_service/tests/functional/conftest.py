@@ -1,6 +1,7 @@
+import asyncio
+
 import pytest
 import aiohttp
-from elasticsearch import AsyncElasticsearch
 
 from utils.HTTPResponse import HTTPResponse
 from settings import TestSettings
@@ -8,7 +9,7 @@ from settings import TestSettings
 settings = TestSettings()
 
 
-@pytest.fixture
+@pytest.fixture(scope='function')
 def make_get_request(session):
     async def inner(method: str, params: dict = None) -> HTTPResponse:
         params = params or {}
@@ -20,6 +21,14 @@ def make_get_request(session):
                 status=response.status,
             )
     return inner
+
+
+@pytest.fixture(scope="session")
+def event_loop(request):
+    """Create an instance of the default event loop for each test case."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
 @pytest.fixture(scope='session')
