@@ -21,20 +21,36 @@ default_params = [({}, get_data_from_file("film_list_default.json"), 200, 50)]
 
 sort_params = [({"sort": "imdb_rating"}, get_data_from_file("film_list_default.json"), 200, 50),
                ({"sort": "-imdb_rating"}, get_data_from_file("film_list_desc_sorted.json"), 200, 50),
-               ({"sort": "rating"}, None, 422, None)]
+               ({"sort": "rating"}, None, 422, None)
+               ]
 
 page_num_params = [({"page_number": 0}, get_data_from_file("film_list_default.json"), 200, 50),
                    ({"page_number": 15}, get_data_from_file("film_list_page_number_15.json"), 200, 50),
                    ({"page_number": 19}, get_data_from_file("film_list_page_number_19.json"), 200, 49),
                    ({"page_number": "two"}, None, 422, None),
                    pytest.param({"page_number": 20}, None, 204, None,
-                                marks=pytest.mark.skip(reason="Fix response status 200->204")),
+                                marks=pytest.mark.skip(reason="Fix response status 200->204 or 404")),
                    pytest.param({"page_number": -1}, None, 422, None,
-                                marks=pytest.mark.skip(reason="ES throws exception. Fix response status 500->422"))]
+                                marks=pytest.mark.skip(reason="ES throws exception. Fix response status 500->422"))
+                   ]
+
+page_size_params = [({"page_size": 99}, get_data_from_file("film_list_page_size_99.json"), 200, 99),
+                    ({"page_size": 1000}, get_data_from_file("film_list_page_size_1000.json"), 200, 999),
+                    pytest.param({"page_size": -1}, None, 422, None,
+                                 marks=pytest.mark.skip(reason="Fix response status 200->402"))
+                    ]
 
 genre_params = [({"genre": "Documentary"}, get_data_from_file("film_list_genre_documentary.json"), 200, 50),
                 ({"genre": "Reality-TV"}, get_data_from_file("film_list_genre_realitytv.json"), 200, 38),
-                ({"genre": "Cartoon"}, [], 200, 0)]
+                ({"genre": "Cartoon"}, [], 200, 0)
+                ]
+
+combined_params = [({"genre": "Action", "page_size": 5, "page_number": 2, "sort": "-imdb_rating"},
+                    get_data_from_file("film_list_combined.json"), 200, 5),
+                   ({"genre": "Action", "page_size": 5, "page_number": 2, "sort": "id"}, None, 422, None),
+                   pytest.param({"genre": "Comedy", "page_size": 10, "page_number": 100}, None, 204, None,
+                                marks=pytest.mark.skip(reason="Fix response status 200->204 or 404"))
+                   ]
 
 # Format of parameters: (film_id, expected_data_list, response_status)
 film_id_params = [('f92c6b11-3f73-4c3f-a9e3-85b1bb91284b',

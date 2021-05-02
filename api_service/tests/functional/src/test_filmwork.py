@@ -2,15 +2,17 @@ from typing import Union
 
 import pytest
 
-from testdata.test_parameters.film_list_params import default_params, sort_params, page_num_params, genre_params
-from testdata.test_parameters.film_list_params import film_id_params
+from testdata.test_parameters.film_list_params import default_params, sort_params, page_num_params, page_size_params
+from testdata.test_parameters.film_list_params import film_id_params, genre_params, combined_params
 
 
 @pytest.mark.parametrize("query_params, expected_data, status, page_size",
                          [*default_params,
                           *sort_params,
                           *page_num_params,
-                          *genre_params
+                          *page_size_params,
+                          *genre_params,
+                          *combined_params
                           ])
 @pytest.mark.asyncio
 async def test_film_list(make_get_request, query_params: dict, expected_data: list,
