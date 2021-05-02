@@ -13,7 +13,7 @@ from testdata.test_parameters.film_list_params import film_id_params
                           *genre_params
                           ])
 @pytest.mark.asyncio
-async def test_film_list(make_get_request, query_params: dict, expected_data: Union[list, dict],
+async def test_film_list(make_get_request, query_params: dict, expected_data: list,
                          status: int, page_size: int):
     """
     Проверка запроса списка фильмов с передачей параметров
@@ -32,7 +32,7 @@ async def test_film_list(make_get_request, query_params: dict, expected_data: Un
 @pytest.mark.parametrize("film_id, expected_data, status",
                          [*film_id_params])
 @pytest.mark.asyncio
-async def test_film_by_id(make_get_request, film_id: str, expected_data: Union[list, dict], status: int):
+async def test_film_by_id(make_get_request, film_id: str, expected_data: dict, status: int):
     """
     Проверка поиска фильма по id
     """
