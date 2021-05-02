@@ -8,8 +8,6 @@ services:
       - 9200:9200
     environment:
       - discovery.type=single-node
-    volumes:
-      - ./testdata/elastic:/usr/share/elasticsearch/data
 
   redis:
     container_name: tests_redis
