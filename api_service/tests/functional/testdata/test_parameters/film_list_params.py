@@ -1,4 +1,5 @@
 import json
+from typing import Union
 
 import pytest
 
@@ -8,7 +9,7 @@ parent_dir = Path(__file__).parents[1]
 files_dir = parent_dir.joinpath("expected_data", "films")
 
 
-def get_data_from_file(expected_data_file):
+def get_data_from_file(expected_data_file: str) -> Union[list, dict]:
     file = files_dir.joinpath(expected_data_file)
     with open(file, encoding="utf-8") as json_file:
         data = json.load(json_file)
@@ -34,3 +35,11 @@ page_num_params = [({"page_number": 0}, get_data_from_file("film_list_default.js
 genre_params = [({"genre": "Documentary"}, get_data_from_file("film_list_genre_documentary.json"), 200, 50),
                 ({"genre": "Reality-TV"}, get_data_from_file("film_list_genre_realitytv.json"), 200, 38),
                 ({"genre": "Cartoon"}, [], 200, 0)]
+
+# Format of parameters: (film_id, expected_data_list, response_status)
+film_id_params = [('f92c6b11-3f73-4c3f-a9e3-85b1bb91284b',
+                   get_data_from_file("film_id_f92c6b11-3f73-4c3f-a9e3-85b1bb91284b.json"), 200),
+                  ('5a5f31ab-d212-4512-8e2b-23421854508a',
+                   get_data_from_file("film_id_5a5f31ab-d212-4512-8e2b-23421854508a.json"), 200),
+                  ('c8cb8aa5-926c-4180-81cb-404e2be58a2c', None, 404)
+                  ]
