@@ -17,7 +17,7 @@ RUN pip install --requirement requirements.txt
 
 ADD docker-entrypoint.sh .
 
-EXPOSE 5000
+EXPOSE 8000
 
 RUN chown -R app:app /home/${USER}/${APP_DIR}
 

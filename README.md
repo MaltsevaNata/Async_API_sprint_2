@@ -7,3 +7,23 @@
 Вы можете разбить эти задачи на более маленькие, например, распределять между участниками команды не большие куски задания, а маленькие подзадачи. В таком случае не забудьте зафиксировать изменения в issues в репозитории.
 
 **От каждого разработчика ожидается выполнение минимум 40% от общего числа стори поинтов в спринте.**
+
+# Тестирование
+Все команды выполняются внутри каталога `api_service/tests/functional`
+
+Сервис запущен локально, тесты выполняются локально:
+```shell
+$ docker-compose docker-compose.dev.yaml up -d
+```
+
+Сервис запущен внутри Docker, тесты выполняются локально:
+```shell
+$ docker-compose -f docker-compose.dev.yaml -f docker-compose.testlocal.yaml up -d
+```
+
+Сервис запущен внутри Docker, тесты выполняются в Docker:
+```shell
+$ docker-compose -f docker-compose.dev.yaml \
+                 -f docker-compose.testlocal.yaml \
+                 -f docker-compose.isolated.yaml up -d
+```
