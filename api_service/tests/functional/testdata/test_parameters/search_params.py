@@ -2,7 +2,7 @@ import pytest
 
 # Формат параметров: model, query_params, expected_data, status, page_size
 
-query_params = [
+film_search_params = [
     # совпадения по заголовку фильма и описанию с параметрами страницы
     ("film", {"query": "captain"}, "query_captain.json", 200, 34),
     ("film", {"query": "star", "page_size": 10, "page_number": 1},
