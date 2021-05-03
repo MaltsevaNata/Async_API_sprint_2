@@ -2,19 +2,25 @@ from pathlib import Path
 
 import pytest
 
-from testdata.test_parameters.search_params import film_search_params
-from utils.get_data_from_file import get_data_from_file
+from ..testdata.test_parameters.search_params import query_params
+from ..utils.get_data_from_file import get_data_from_file
 
 parent_dir = Path(__file__).parents[1]
 files_dir = parent_dir.joinpath("testdata", "expected_data", "search")
 
 
-@pytest.mark.parametrize("model, query, expected_data_file, status, page_size",
-                         [*film_search_params
-                          ])
+@pytest.mark.parametrize(
+    "model, query, expected_data_file, status, page_size", [*query_params]
+)
 @pytest.mark.asyncio
-async def test_search(make_get_request, model: str, query: dict, expected_data_file: str,
-                      status: int, page_size: int):
+async def test_search(
+    make_get_request,
+    model: str,
+    query: dict,
+    expected_data_file: str,
+    status: int,
+    page_size: int,
+):
     """
     Проверка запросов поиска для всех моделей
     """
