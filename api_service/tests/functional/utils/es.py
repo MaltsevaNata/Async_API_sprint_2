@@ -1,3 +1,7 @@
+"""
+Утилиты для Elasticsearch.
+"""
+
 import json
 from typing import Iterable
 from urllib.parse import urljoin
