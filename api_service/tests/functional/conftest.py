@@ -3,13 +3,13 @@ import asyncio
 import pytest
 import aiohttp
 
-from utils.HTTPResponse import HTTPResponse
-from settings import TestSettings
+from .utils.HTTPResponse import HTTPResponse
+from .settings import TestSettings
 
 settings = TestSettings()
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def make_get_request(session):
     async def inner(method: str, params: dict = None) -> HTTPResponse:
         params = params or {}
@@ -20,6 +20,7 @@ def make_get_request(session):
                 headers=response.headers,
                 status=response.status,
             )
+
     return inner
 
 
@@ -31,7 +32,7 @@ def event_loop(request):
     loop.close()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 async def session():
     session = aiohttp.ClientSession()
     yield session
