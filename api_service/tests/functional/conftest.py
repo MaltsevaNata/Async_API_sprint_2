@@ -1,12 +1,20 @@
 import asyncio
+from dataclasses import dataclass
+from multidict import CIMultiDictProxy
 
 import pytest
 import aiohttp
 
-from .utils.HTTPResponse import HTTPResponse
 from .settings import TestSettings
 
 settings = TestSettings()
+
+
+@dataclass
+class HTTPResponse:
+    body: dict
+    headers: CIMultiDictProxy[str]
+    status: int
 
 
 @pytest.fixture(scope="function")
