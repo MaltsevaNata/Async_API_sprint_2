@@ -6,7 +6,7 @@ import json
 from typing import Iterable
 from urllib.parse import urljoin
 
-import requests as requests
+import requests
 
 
 def bulk_insert(url: str, index: str, records: list[dict]) -> None:

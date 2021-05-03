@@ -2,8 +2,8 @@ import json
 from pathlib import Path
 from urllib.parse import urljoin
 
-import pytest as pytest
-import requests as requests
+import pytest
+import requests
 
 from .settings import TestSettings
 from .utils import bulk_insert
