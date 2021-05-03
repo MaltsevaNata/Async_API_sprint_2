@@ -20,3 +20,10 @@ $ docker-compose docker-compose.dev.yaml up -d
 ```shell
 $ docker-compose -f docker-compose.dev.yaml -f docker-compose.testlocal.yaml up -d
 ```
+
+Сервис запущен внутри Docker, тесты выполняются в Docker:
+```shell
+$ docker-compose -f docker-compose.dev.yaml \
+                 -f docker-compose.testlocal.yaml \
+                 -f docker-compose.isolated.yaml up -d
+```
