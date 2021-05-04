@@ -28,6 +28,7 @@ files_dir = parent_dir.joinpath("testdata", "expected_data", "films")
         *combined_params,
     ],
 )
+@pytest.mark.usefixtures("clear_cache")
 @pytest.mark.asyncio
 async def test_film_list(
     make_get_request,
@@ -52,6 +53,7 @@ async def test_film_list(
 
 
 @pytest.mark.parametrize("film_id, expected_data_file, status", [*film_id_params])
+@pytest.mark.usefixtures("clear_cache")
 @pytest.mark.asyncio
 async def test_film_by_id(
     make_get_request, film_id: str, expected_data_file: str, status: int
