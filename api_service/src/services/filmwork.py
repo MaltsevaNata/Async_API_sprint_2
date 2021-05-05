@@ -9,10 +9,10 @@ from fastapi import Depends, HTTPException
 from db.elastic import get_elastic
 from db.redis import get_redis
 from models.filmwork import FilmWork
-from .base import Service
+from .base import MultiMatchSearchMixin, Service
 
 
-class FilmService(Service):
+class FilmService(MultiMatchSearchMixin, Service):
     es_index = "movies"
     model_type = FilmWork
 
@@ -42,15 +42,9 @@ class FilmService(Service):
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[FilmWork]:
 
-        query = {"multi_match": {"query": query, "fields": ["title", "description"]}}
-
-        body = {
-            "from": page_number * page_size,
-            "size": page_size,
-            "query": query,
-        }
-
-        return await self._search(url, body=body)
+        return await self._multi_match_search(
+            url, query, page_number, page_size, ["title", "description"]
+        )
 
 
 @lru_cache()
