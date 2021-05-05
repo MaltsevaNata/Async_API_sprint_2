@@ -33,25 +33,18 @@ def setup_indices():
     """
     indices = "movies persons genres".split()
 
-    host = "{}:{}".format(settings.es_host, settings.es_port)
-
-    # FIXME
-    if not host.startswith("http://"):
-        host = f"http://{host}"
-
     for index in indices:
         with TEST_DATA_DIR.joinpath("elastic", f"{index}.json").open() as file:
             data = json.load(file)
-        requests.put(urljoin(host, index))
-        bulk_insert(host, index, data)
+        requests.put(urljoin(settings.es_url, index))
+        bulk_insert(settings.es_url, index, data)
 
-        # FIXME
         time.sleep(0.5)
 
     yield
 
     for index in indices:
-        requests.delete(urljoin(host, index))
+        requests.delete(urljoin(settings.es_url, index))
 
 
 @pytest.fixture(scope="function")
