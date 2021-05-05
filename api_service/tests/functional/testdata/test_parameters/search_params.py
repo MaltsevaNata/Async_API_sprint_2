@@ -1,3 +1,5 @@
+from urllib.parse import quote_plus
+
 import pytest
 
 # Формат параметров: model, query_params, expected_data, status, page_size
@@ -21,3 +23,5 @@ film_search_params = [
     ("film", {"query": "Captain James T. Kirk", "page_size": 100}, "query_Captain_James_size_1000.json",
      200, 46)
 ]
+
+
