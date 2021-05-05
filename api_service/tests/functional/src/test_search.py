@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from ..testdata.test_parameters.search_params import film_search_params
-from ..utils.get_data_from_file import get_data_from_file
+from ..utils import conclude_result
 
 parent_dir = Path(__file__).parents[1]
 files_dir = parent_dir.joinpath("testdata", "expected_data", "search")
@@ -27,15 +27,9 @@ async def test_search(
     Проверка запросов поиска для всех моделей
     """
     response = await make_get_request(f"""/{model}/search/""", query)
+    body = sort_by_id(response.body)
 
-    # Проверка статуса ответа
-    assert response.status == status
-
-    if expected_data_file is not None:
-        # Проверка соответствия ответа содержимому файла
-        expected_data = get_data_from_file(files_dir, expected_data_file)
-        assert len(response.body) == page_size
-        assert sort_by_id(response.body) == sort_by_id(expected_data)
+    conclude_result(body, response.status, expected_data_file, status, page_size, files_dir)
 
 
 def sort_by_id(films):

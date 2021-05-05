@@ -11,7 +11,7 @@ from ..testdata.test_parameters.film_params import (
     page_size_params,
     sort_params,
 )
-from ..utils.get_data_from_file import get_data_from_file
+from ..utils import conclude_result
 
 parent_dir = Path(__file__).parents[1]
 files_dir = parent_dir.joinpath("testdata", "expected_data", "films")
@@ -42,14 +42,7 @@ async def test_film_list(
     """
     response = await make_get_request("/film", query_params)
 
-    # Проверка статуса ответа
-    assert response.status == status
-
-    if expected_data_file is not None:
-        # Проверка соответствия ответа содержимому файла
-        expected_data = get_data_from_file(files_dir, expected_data_file)
-        assert len(response.body) == page_size
-        assert response.body == expected_data
+    conclude_result(response.body, response.status, expected_data_file, status, page_size, files_dir)
 
 
 @pytest.mark.parametrize("film_id, expected_data_file, status", [*film_id_params])
@@ -63,10 +56,4 @@ async def test_film_by_id(
     """
     response = await make_get_request(f"""/film/{film_id}""", {})
 
-    # Проверка статуса ответа
-    assert response.status == status
-
-    if expected_data_file is not None:
-        expected_data = get_data_from_file(files_dir, expected_data_file)
-        # Проверка соответствия ответа содержимому файла
-        assert response.body == expected_data
+    conclude_result(response.body, response.status, expected_data_file, status, None, files_dir)
