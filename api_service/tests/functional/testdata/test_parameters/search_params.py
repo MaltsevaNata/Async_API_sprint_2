@@ -9,13 +9,10 @@ film_search_params = [
      "query_star_page_1_size_10.json", 200, 10),
 
     # запрос к несуществующим страницам
-    pytest.param("film", {"query": "star", "page_size": 10, "page_number": 100},
-                 None, 204, None, marks=pytest.mark.skip(reason="Fix response status 200->204 or 404")),
+    ("film", {"query": "star", "page_size": 10, "page_number": 100}, None, 200, 0),
 
     # отрицательный номер страницы
-    pytest.param("film", {"query": "star", "page_number": -1},
-                 None, 422, None, marks=pytest.mark.skip(reason="ES throws exception. Fix response status "
-                                                                "500->422")),
+    ("film", {"query": "star", "page_number": -1}, None, 422, None),
 
     # поиск по нескольким словам
     ("film", {"query": "Captain James T. Kirk", "page_size": 100}, "query_Captain_James_size_1000.json",
@@ -31,13 +28,10 @@ person_search_params = [
     ("person", {"query": "Robert Woods", "page_number": 1}, "query_robert_woods_page_1.json", 200, 6),
 
     # запрос к несуществующим страницам
-    pytest.param("person", {"query": "Robert Woods", "page_number": 2},
-                 None, 204, None, marks=pytest.mark.skip(reason="Fix response status 200->204 or 404")),
+    ("person", {"query": "Robert Woods", "page_number": 2}, None, 200, 0),
 
     # отрицательный номер страницы
-    pytest.param("person", {"query": "Jack", "page_number": -1},
-                 None, 422, None, marks=pytest.mark.skip(reason="ES throws exception. Fix response status "
-                                                                "500->422")),
+    ("person", {"query": "Jack", "page_number": -1}, None, 422, None),
 ]
 
 

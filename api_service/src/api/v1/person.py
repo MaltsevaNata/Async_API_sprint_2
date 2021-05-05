@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Query
 
 from models.person import Person
 from services.person import PersonService, get_person_service
@@ -28,8 +28,8 @@ async def person_details(
 async def search_persons(
     request: Request,
     query: str,
-    page_number: int = 0,
-    page_size: int = 50,
+    page_number: int = Query(0, ge=0),
+    page_size: int = Query(50, ge=0),
     person_service: PersonService = Depends(get_person_service),
 ) -> list[Person]:
     """

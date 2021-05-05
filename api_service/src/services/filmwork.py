@@ -1,9 +1,10 @@
 from functools import lru_cache
 from typing import Optional
+from http import HTTPStatus
 
 from aioredis import Redis
 from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from db.elastic import get_elastic
 from db.redis import get_redis
@@ -24,6 +25,7 @@ class FilmService(MultiMatchSearchMixin, Service):
         genre: Optional[str] = None,
     ) -> list[FilmWork]:
         query = {"match_all": {}}
+
         if genre:
             query = {"match": {"genres.name": genre}}
 
@@ -39,6 +41,7 @@ class FilmService(MultiMatchSearchMixin, Service):
     async def search_films(
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[FilmWork]:
+
         return await self._multi_match_search(
             url, query, page_number, page_size, ["title", "description"]
         )

@@ -12,9 +12,13 @@ def conclude_result(body: Optional[Union[list, dict]],
     # Проверка статуса ответа
     assert status == expected_status
 
+    # Проверка соответствия количества элементов
+    if expected_page_size is not None:
+        assert len(body) == expected_page_size
+
+    # Проверка соответствия ответа содержимому файла
     if expected_data_file is not None:
-        # Проверка соответствия ответа содержимому файла
         expected_data = get_data_from_file(files_dir, expected_data_file)
-        if expected_page_size is not None:
-            assert len(body) == expected_page_size
         assert body == expected_data
+
+
