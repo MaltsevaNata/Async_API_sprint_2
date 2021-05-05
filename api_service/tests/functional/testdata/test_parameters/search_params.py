@@ -12,7 +12,7 @@ film_search_params = [
     ("film", {"query": "star", "page_size": 10, "page_number": 100}, None, 200, 0),
 
     # отрицательный номер страницы
-    ("film", {"query": "star", "page_number": -1}, None, 400, None),
+    ("film", {"query": "star", "page_number": -1}, None, 422, None),
 
     # поиск по нескольким словам
     ("film", {"query": "Captain James T. Kirk", "page_size": 100}, "query_Captain_James_size_1000.json",
@@ -31,7 +31,7 @@ person_search_params = [
     ("person", {"query": "Robert Woods", "page_number": 2}, None, 200, 0),
 
     # отрицательный номер страницы
-    ("person", {"query": "Jack", "page_number": -1}, None, 400, None),
+    ("person", {"query": "Jack", "page_number": -1}, None, 422, None),
 ]
 
 
