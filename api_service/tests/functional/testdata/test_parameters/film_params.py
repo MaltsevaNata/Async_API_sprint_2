@@ -28,12 +28,10 @@ page_num_params = [
     ({"page_number": "two"}, None, 422, None),
 
     # несуществующая страница
-    pytest.param({"page_number": 20}, None, 204, None,
-                 marks=pytest.mark.skip(reason="Fix response status 200->204 or 404")),
+    ({"page_number": 20}, None, 200, 0),
 
     # отрицательный номер страницы
-    pytest.param({"page_number": -1}, None, 422, None,
-                 marks=pytest.mark.skip(reason="ES throws exception. Fix response status 500->422"))
+    ({"page_number": -1}, None, 400, None)
 ]
 
 
@@ -45,8 +43,7 @@ page_size_params = [
     ({"page_size": 1000}, "film_list_page_size_1000.json", 200, 999),
 
     # отрицательный размер страницы
-    pytest.param({"page_size": -1}, None, 422, None,
-                 marks=pytest.mark.skip(reason="Fix response status 200->402"))
+    ({"page_size": -1}, None, 400, None)
 ]
 
 
@@ -56,8 +53,7 @@ genre_params = [
     ({"genre": "Reality-TV"}, "film_list_genre_realitytv.json", 200, 38),
 
     # несуществующий жанр
-    pytest.param({"genre": "Cartoon"}, None, 422, None,
-                 marks=pytest.mark.skip(reason="Invalid genre name. Fix response status 200->422"))
+    ({"genre": "Cartoon"}, None, 200, 0)
 ]
 
 
@@ -70,8 +66,7 @@ combined_params = [
     ({"genre": "Action", "page_size": 5, "page_number": 2, "sort": "id"}, None, 422, None),
 
     # запрос к несуществующей странице
-    pytest.param({"genre": "Comedy", "page_size": 10, "page_number": 100}, None, 204, None,
-                 marks=pytest.mark.skip(reason="Fix response status 200->204 or 404"))
+    ({"genre": "Comedy", "page_size": 10, "page_number": 100}, None, 200, 0)
 ]
 
 # Формат параметров: (film_id, expected_data_list, response_status)

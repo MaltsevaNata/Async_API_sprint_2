@@ -36,5 +36,9 @@ async def test_search(
     conclude_result(body, response.status, expected_data_file, status, page_size, files_dir)
 
 
-def sort_by_id(films):
-    return sorted(films, key=operator.itemgetter("id"))
+def sort_by_id(items):
+    try:
+        sorted_result = sorted(items, key=operator.itemgetter("id"))
+        return sorted_result
+    except TypeError:  # Ответ не является списком сущностей, а содержит описание ошибки
+        return items
