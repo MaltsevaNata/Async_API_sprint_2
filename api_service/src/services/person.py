@@ -1,8 +1,9 @@
 from functools import lru_cache
+from http import HTTPStatus
 
 from aioredis import Redis
 from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from db.elastic import get_elastic
 from db.redis import get_redis
@@ -17,6 +18,10 @@ class PersonService(Service):
     async def search_persons(
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[Person]:
+
+        if page_size < 0 or page_number < 0:
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
+
         query = {"multi_match": {"query": query, "fields": ["first_name", "last_name"]}}
 
         body = {

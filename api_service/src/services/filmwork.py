@@ -1,9 +1,10 @@
 from functools import lru_cache
 from typing import Optional
+from http import HTTPStatus
 
 from aioredis import Redis
 from elasticsearch import AsyncElasticsearch
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from db.elastic import get_elastic
 from db.redis import get_redis
@@ -24,6 +25,10 @@ class FilmService(Service):
         genre: Optional[str] = None,
     ) -> list[FilmWork]:
         query = {"match_all": {}}
+
+        if page_size < 0 or page_number < 0:
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
+
         if genre:
             query = {"match": {"genres.name": genre}}
 
@@ -39,6 +44,10 @@ class FilmService(Service):
     async def search_films(
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[FilmWork]:
+
+        if page_size < 0 or page_number < 0:
+            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
+
         query = {"multi_match": {"query": query, "fields": ["title", "description"]}}
 
         body = {
