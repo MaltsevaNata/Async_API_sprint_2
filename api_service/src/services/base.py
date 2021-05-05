@@ -67,3 +67,22 @@ class Service:
             url, self.elastic.search, index=self.es_index, body=body
         )
         return [self.model_type(**doc["_source"]) for doc in response["hits"]["hits"]]
+
+
+class MultiMatchSearchMixin:
+    """
+    Примесь для полнотекстового поиска по нескольким полям.
+    """
+
+    async def _multi_match_search(
+        self, url: str, query: str, page_number: int, page_size: int, fields: list[str]
+    ):
+        query = {"multi_match": {"query": query, "fields": fields}}
+
+        body = {
+            "from": page_number * page_size,
+            "size": page_size,
+            "query": query,
+        }
+
+        return await self._search(url, body)
