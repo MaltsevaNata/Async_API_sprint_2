@@ -1,13 +1,15 @@
+import asyncio
 import json
+import time
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urljoin
-import asyncio
-from dataclasses import dataclass
-from multidict import CIMultiDictProxy
 
-import pytest
-import requests
 import aiohttp
+import pytest
+import redis
+import requests
+from multidict import CIMultiDictProxy
 
 from .settings import TestSettings
 from .utils import bulk_insert
@@ -22,8 +24,8 @@ class HTTPResponse:
     body: dict
     headers: CIMultiDictProxy[str]
     status: int
-      
-      
+
+
 @pytest.fixture(scope="session", autouse=True)
 def setup_indices():
     """
@@ -31,17 +33,26 @@ def setup_indices():
     """
     indices = "movies persons genres".split()
 
+    host = "{}:{}".format(settings.es_host, settings.es_port)
+
+    # FIXME
+    if not host.startswith("http://"):
+        host = f"http://{host}"
+
     for index in indices:
         with TEST_DATA_DIR.joinpath("elastic", f"{index}.json").open() as file:
             data = json.load(file)
-        requests.put(urljoin(settings.es_host, index))
-        bulk_insert(settings.es_host, index, data)
+        requests.put(urljoin(host, index))
+        bulk_insert(host, index, data)
+
+        # FIXME
+        time.sleep(0.5)
 
     yield
 
     for index in indices:
-        requests.delete(urljoin(settings.es_host, index))
-     
+        requests.delete(urljoin(host, index))
+
 
 @pytest.fixture(scope="function")
 def make_get_request(session):
@@ -71,3 +82,16 @@ async def session():
     session = aiohttp.ClientSession()
     yield session
     await session.close()
+
+
+@pytest.fixture(scope="session")
+def redis_client():
+    return redis.Redis(settings.redis_host, settings.redis_port)
+
+
+@pytest.fixture(scope="session")
+def clear_cache(redis_client):
+    """
+    Очистить Redis cache до и после выполнения теста.
+    """
+    redis_client.flushall()

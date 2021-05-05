@@ -1,3 +1,4 @@
+import operator
 from pathlib import Path
 
 import pytest
@@ -12,6 +13,7 @@ files_dir = parent_dir.joinpath("testdata", "expected_data", "search")
 @pytest.mark.parametrize(
     "model, query, expected_data_file, status, page_size", [*film_search_params]
 )
+@pytest.mark.usefixtures("clear_cache")
 @pytest.mark.asyncio
 async def test_search(
     make_get_request,
@@ -33,4 +35,8 @@ async def test_search(
         # Проверка соответствия ответа содержимому файла
         expected_data = get_data_from_file(files_dir, expected_data_file)
         assert len(response.body) == page_size
-        assert response.body == expected_data
+        assert sort_by_id(response.body) == sort_by_id(expected_data)
+
+
+def sort_by_id(films):
+    return sorted(films, key=operator.itemgetter("id"))
