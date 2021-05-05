@@ -19,9 +19,6 @@ class PersonService(Service):
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[Person]:
 
-        if page_size < 0 or page_number < 0:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
-
         query = {"multi_match": {"query": query, "fields": ["first_name", "last_name"]}}
 
         body = {

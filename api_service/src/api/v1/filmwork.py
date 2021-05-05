@@ -28,8 +28,8 @@ async def film_details(
 @router.get("/")
 async def films(
     request: Request,
-    page_number: int = 0,
-    page_size: int = 50,
+    page_number: int = Query(0, ge=0),
+    page_size: int = Query(50, ge=0),
     sort: str = Query("imdb_rating", regex="-?imdb_rating$"),
     genre: Optional[str] = None,
     film_service: FilmService = Depends(get_film_service),
@@ -56,8 +56,8 @@ async def films(
 async def search_films(
     request: Request,
     query: str,
-    page_number: int = 0,
-    page_size: int = 50,
+    page_number: int = Query(0, ge=0),
+    page_size: int = Query(50, ge=0),
     film_service: FilmService = Depends(get_film_service),
 ) -> list[FilmWork]:
     """

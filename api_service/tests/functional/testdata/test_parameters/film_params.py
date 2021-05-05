@@ -31,7 +31,7 @@ page_num_params = [
     ({"page_number": 20}, None, 200, 0),
 
     # отрицательный номер страницы
-    ({"page_number": -1}, None, 400, None)
+    ({"page_number": -1}, None, 422, None)
 ]
 
 
@@ -43,7 +43,7 @@ page_size_params = [
     ({"page_size": 1000}, "film_list_page_size_1000.json", 200, 999),
 
     # отрицательный размер страницы
-    ({"page_size": -1}, None, 400, None)
+    ({"page_size": -1}, None, 422, None)
 ]
 
 

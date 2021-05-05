@@ -26,9 +26,6 @@ class FilmService(Service):
     ) -> list[FilmWork]:
         query = {"match_all": {}}
 
-        if page_size < 0 or page_number < 0:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
-
         if genre:
             query = {"match": {"genres.name": genre}}
 
@@ -44,9 +41,6 @@ class FilmService(Service):
     async def search_films(
         self, url: str, query: str, page_number: int, page_size: int
     ) -> list[FilmWork]:
-
-        if page_size < 0 or page_number < 0:
-            raise HTTPException(status_code=HTTPStatus.BAD_REQUEST, detail="Invalid query")
 
         query = {"multi_match": {"query": query, "fields": ["title", "description"]}}
 
